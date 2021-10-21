@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Search
-      placeholder="Введите имя автора.."
+      placeholder="Введите имя автора..."
       label="Поиск по имени автора"
       @input="searchHandle"
     />
@@ -44,23 +44,19 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('articlesStore/getArticles');
-    this.$store.dispatch('articlesStore/getUsers');
     this.fetchHandle();
   },
   methods: {
     ...mapActions('articlesStore', ['getArticles', 'getUsers']),
     fetchHandle() {
-      if (!this.articles.length && !this.users.length) {
-        this.fetchHandle();
-      } else {
-        this.articlesList = this.articles.map((item) => {
-          return {
-            ...item,
-            author: this.users.find((user) => { return user.id === item.userId; }).name,
-          };
-        });
-      }
+      this.$store.dispatch('articlesStore/getArticles');
+      this.$store.dispatch('articlesStore/getUsers');
+      this.articlesList = this.articles.map((item) => {
+        return {
+          ...item,
+          author: this.users.find((user) => { return user.id === item.userId; }).name,
+        };
+      });
     },
     searchHandle(data) {
       this.search = data;
